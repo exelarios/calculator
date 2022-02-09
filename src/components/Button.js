@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import { useComputeContext } from "../utils";
 
 const StyledButton = styled.button`
   width: ${p => p.large ? `100px` : `50px`};
   height: 50px;
-  background-color: gray;
+  background-color: ${p => p.isOperator ? `orange` : `gray`};
   text-align: center;
   color: white;
   font-weight: bold;
@@ -16,8 +17,10 @@ const StyledButton = styled.button`
 
 export function Button(props) {
   const { value } = props;
+  const { getButtonProps } = useComputeContext();
+
   return (
-    <StyledButton {...props}>
+    <StyledButton {...getButtonProps(props)}>
       {value}
     </StyledButton>
   );
