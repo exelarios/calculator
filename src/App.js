@@ -1,4 +1,6 @@
-import { useMemo, useState } from "react";
+import { 
+  useMemo 
+} from "react";
 
 import { 
   Button,
@@ -9,11 +11,17 @@ import {
   Row
 } from "./assets/styles";
 
-import { ComputeContext, useCompute } from "./utils";
+import { 
+  ComputeContext, 
+  useCompute 
+} from "./utils";
 
 function App() {
 
-  const { displayValue, getButtonProps } = useCompute();
+  const { 
+    displayValue, 
+    getButtonProps 
+  } = useCompute();
 
   const value = useMemo(() => {
     return {
@@ -42,6 +50,12 @@ function App() {
           <Button value="5"/>
           <Button value="6"/>
           <Button isOperator value="-"/>
+        </Row>
+        <Row>
+          <Button value="3"/>
+          <Button value="2"/>
+          <Button value="1"/>
+          <Button isOperator value="+"/>
         </Row>
         <Row>
           <Button large value="0"/>
