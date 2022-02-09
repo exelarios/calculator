@@ -7,6 +7,7 @@ import {
 export function useCompute() {
   const [operator, setOperator] = useState("");
   const [displayValue, setDisplayValue] = useState(0);
+  const [flag, setFlag] = useState(0);
   const operands = useRef([]);
 
   const calculateExpression = useCallback(() => {
@@ -32,7 +33,7 @@ export function useCompute() {
     operands.current = [displayValue];
   }, [displayValue, operator]);
 
-  const parseNumbers = useCallback((value) => {
+  const parseOperands = useCallback((value) => {
     if (isNaN(value)) return;
     const handleValue = (oldValue) => {
       // Keep in mind, `oldValue` return a string.
@@ -41,16 +42,21 @@ export function useCompute() {
       }
       return value;
     }
-    setDisplayValue(handleValue);
-  }, []);
 
-  const handleOperands = useCallback((value) => {
+    if (flag) {
+      setDisplayValue(0);
+      setFlag(0);
+    }
+    setDisplayValue(handleValue);
+  }, [flag]);
+
+  const handleOperators = useCallback((value) => {
     // Shouldn't be allowed to set the operator before the first operand.
     if (displayValue < 1) return;
     // As the user selects an operator, we store the first operand.
     operands.current = [displayValue];
     setOperator(value);
-    setDisplayValue(0);
+    setFlag(1);
   }, [displayValue]);
 
   const handleTokens = useCallback((value) => {
@@ -59,12 +65,13 @@ export function useCompute() {
       case "-":
       case "/":
       case "x":
-        handleOperands(value);
+        handleOperators(value);
         break;
       case "=":
         calculateExpression();
         break;
       case "+/-":
+        // setDisplayValue(displayValue * -1);
         break;
       case "AC":
         setDisplayValue(0);
@@ -74,9 +81,9 @@ export function useCompute() {
       case ".":
         break;
       default:
-        parseNumbers(value);
+        parseOperands(value);
     }
-  }, [calculateExpression, parseNumbers, handleOperands]);
+  }, [calculateExpression, parseOperands, handleOperators]);
 
   const getButtonProps = useCallback((props) => {
     const { value } = props;
